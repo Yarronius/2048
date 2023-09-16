@@ -5,6 +5,7 @@ import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
@@ -34,44 +35,57 @@ public class View extends Pane {
         int textCoordinateY = 90;
         for (int i = 1; i <= 16; i++) {
             Pane pane = new Pane();
-
+            pane.setPrefSize(120, 120);
+            pane.setLayoutX(coordinateX);
+            pane.setLayoutY(coordinateY);
             Rectangle rectangle = new Rectangle(120, 120);
-            Text text = new Text(textCoordinateX, textCoordinateY, "");
+            Text text = new Text("");
             text.setFont(new Font(98));
             rectangle.setFill(Color.BEIGE);
             rectangle.setStroke(Color.BLACK);
             rectangle.setStrokeType(StrokeType.INSIDE);
-            rectangle.setLayoutX(coordinateX);
-            rectangle.setLayoutY(coordinateY);
-            this.getChildren().add(rectangle);
-            this.getChildren().add(text);
+            pane.getChildren().add(rectangle);
+            pane.getChildren().add(text);
+            text.setLayoutX(textCoordinateX);
+            text.setLayoutY(textCoordinateY);
+            this.getChildren().add(pane);
             coordinateX = i % 4 == 0 ? (coordinateX + 120) : coordinateX;
             coordinateY = i % 4 == 0 ? 0 : (coordinateY + 120);
-            textCoordinateX = i % 4 == 0 ? (textCoordinateX + 120) : textCoordinateX;
-            textCoordinateY = i % 4 == 0 ? 90 : (textCoordinateY + 120);
+            //textCoordinateX = i % 4 == 0 ? (textCoordinateX + 120) : textCoordinateX;
+            //textCoordinateY = i % 4 == 0 ? 90 : (textCoordinateY + 120);
         }
     }
 
     public void draw(Tile[][] tiles) {
         List<Node> tileList = this.getChildren();
         for (int i = 0; i < 16; i++) {
-                int tileListIndex = Tile.getListIndexFromCoordinates(i/4, i%4);
-                Rectangle rectangle = (Rectangle) tileList.get(tileListIndex);
-                rectangle.setFill(tiles[i/4][i%4].getTileColor());
-                Text text = (Text) tileList.get(tileListIndex + 1);
-                if (tiles[i/4][i%4].value != 0) {
-                    text.setText(String.valueOf(tiles[i/4][i%4].value));
-                } else {
-                    text.setText("");
-                }
-                if(tiles[i/4][i%4].value < 9) {
-                    text.setX(text.getX() % 120 > 35 ? text.getX() - 25 : text.getX() % 120 < 35 ? text.getX() + 25 : text.getX());
-                } else if (tiles[i/4][i%4].value > 9 && tiles[i/4][i%4].value < 100) {
-                    text.setX(text.getX() % 120 < 35 ? text.getX() : text.getX() - 25);
-                } else if (tiles[i/4][i%4].value > 100 && tiles[i/4][i%4].value < 1000) {
-                    text.setX(text.getX() % 120 < 35 ? text.getX() : text.getX() - 55);
-                    text.setFont(new Font(48));
-                }
+            Tile tile = tiles[i%4][i/4];
+            Pane pane = (Pane) tileList.get(i);
+            Rectangle rectangle = (Rectangle) pane.getChildren().get(0);
+            rectangle.setFill(tile.getTileColor());
+            Text text = (Text) pane.getChildren().get(1);
+            if (tile.getValue() != 0) {
+                text.setText(String.valueOf(tile.getValue()));
+            } else {
+                text.setText("");
+            }
+            if(tile.getValue() < 9) {
+                text.setLayoutX(35);
+                text.setLayoutY(90);
+                text.setFont(new Font(98));
+            } else if(tile.getValue() > 8 && tile.getValue() < 65) {
+                text.setLayoutX(5);
+                text.setLayoutY(90);
+                text.setFont(new Font(98));
+            } else if (tile.getValue() > 64 && tile.getValue() < 1024) {
+                text.setLayoutX(0);
+                text.setLayoutY(80);
+                text.setFont(new Font(72));
+            } else {
+                text.setLayoutX(0);
+                text.setLayoutY(75);
+                text.setFont(new Font(54));
+            }
         }
     }
 }

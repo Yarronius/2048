@@ -53,7 +53,7 @@ public class Model {
                 result[k++] = tiles[i];
             }
         }
-        System.out.println("Shift not done" + Arrays.equals(tiles, result));
+        System.out.println("Shift not done - " + Arrays.equals(tiles, result));
         if (Arrays.equals(tiles, result)) return false;
         for (int i = 0; i < 4; i++) {
             tiles[i] = result[i];
@@ -67,12 +67,10 @@ public class Model {
             if (tiles[i].getValue() != 0 && tiles[i].getValue() == tiles[i + 1].getValue()) {
                 isChanged = true;
                 int scoreIncrement = tiles[i].getValue() * 2;
-
                 tiles[i].setValue(tiles[i].getValue() * 2);
                 tiles[i + 1].setValue(0);
                 compressTiles(tiles);
                 score += scoreIncrement;
-                i++;
                 if (scoreIncrement > maxTile) maxTile = scoreIncrement;
             }
         }
@@ -84,14 +82,13 @@ public class Model {
         boolean isMerged = false;
         boolean isNewNumberNeeded = false;
         for (int i = 0; i < 4; i++) {
-            isCompressed = compressTiles(gameTiles[i]);
             isMerged = mergeTiles(gameTiles[i]);
+            isCompressed = compressTiles(gameTiles[i]);
             if(isCompressed || isMerged) {
                 isNewNumberNeeded = true;
             }
         }
         if (isNewNumberNeeded) {
-            System.out.println("NEW TILE ADDED");
             addTile();
         }
     }

@@ -3,7 +3,7 @@ package com.example.demo;
 import javafx.scene.paint.Color;
 
 public class Tile {
-    int value = 0;
+    private int value = 0;
 
     public Tile(int value) {
         this.value = value;
