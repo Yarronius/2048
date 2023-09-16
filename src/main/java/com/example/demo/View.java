@@ -54,21 +54,24 @@ public class View extends Pane {
 
     public void draw(Tile[][] tiles) {
         List<Node> tileList = this.getChildren();
-        for (int i = 0; i < 4; i++) {
-            for (int j = 0; j < 4; j++) {
-                int tileListIndex = Tile.getListIndexFromCoordinates(i, j);
+        for (int i = 0; i < 16; i++) {
+                int tileListIndex = Tile.getListIndexFromCoordinates(i/4, i%4);
                 Rectangle rectangle = (Rectangle) tileList.get(tileListIndex);
-                rectangle.setFill(tiles[i][j].getTileColor());
+                rectangle.setFill(tiles[i/4][i%4].getTileColor());
                 Text text = (Text) tileList.get(tileListIndex + 1);
-                if (tiles[i][j].value != 0) {
-                    text.setText(String.valueOf(tiles[i][j].value));
+                if (tiles[i/4][i%4].value != 0) {
+                    text.setText(String.valueOf(tiles[i/4][i%4].value));
                 } else {
                     text.setText("");
-
-                    //System.out.println(Tile.getListIndexFromCoordinates(i, j) + " " + tileList.get(Tile.getListIndexFromCoordinates(i, j)));
-                    //System.out.println(Tile.getListIndexFromCoordinates(i, j) + 1 + " " + tileList.get(Tile.getListIndexFromCoordinates(i, j) + 1));
                 }
-            }
+                if(tiles[i/4][i%4].value < 9) {
+                    text.setX(text.getX() % 120 > 35 ? text.getX() - 25 : text.getX() % 120 < 35 ? text.getX() + 25 : text.getX());
+                } else if (tiles[i/4][i%4].value > 9 && tiles[i/4][i%4].value < 100) {
+                    text.setX(text.getX() % 120 < 35 ? text.getX() : text.getX() - 25);
+                } else if (tiles[i/4][i%4].value > 100 && tiles[i/4][i%4].value < 1000) {
+                    text.setX(text.getX() % 120 < 35 ? text.getX() : text.getX() - 55);
+                    text.setFont(new Font(48));
+                }
         }
     }
 }
