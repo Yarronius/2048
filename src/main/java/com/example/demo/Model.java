@@ -43,14 +43,21 @@ public class Model {
 
     private boolean compressTiles(Tile[] tiles) {
         Tile[] result = new Tile[FIELD_WIDTH];
+        for (int i = 0 ; i < 4; i++) {
+            result[i] = new Tile();
+        }
         for (int i = 0, j = 0, k = 0; i < FIELD_WIDTH; i++) {
             if (tiles[i].getValue() == 0) {
-                result[FIELD_WIDTH - 1 - j++].setValue(0);
+                result[FIELD_WIDTH - 1 - j++] = tiles[i];
+            } else {
+                result[k++] = tiles[i];
             }
-            result[k++].setValue(tiles[i].getValue());
         }
+        System.out.println("Shift not done" + Arrays.equals(tiles, result));
         if (Arrays.equals(tiles, result)) return false;
-        tiles = result;
+        for (int i = 0; i < 4; i++) {
+            tiles[i] = result[i];
+        }
         return true;
     }
 
@@ -60,10 +67,12 @@ public class Model {
             if (tiles[i].getValue() != 0 && tiles[i].getValue() == tiles[i + 1].getValue()) {
                 isChanged = true;
                 int scoreIncrement = tiles[i].getValue() * 2;
+
                 tiles[i].setValue(tiles[i].getValue() * 2);
                 tiles[i + 1].setValue(0);
                 compressTiles(tiles);
                 score += scoreIncrement;
+                i++;
                 if (scoreIncrement > maxTile) maxTile = scoreIncrement;
             }
         }
@@ -72,11 +81,17 @@ public class Model {
 
     void left() {
         boolean isCompressed = false;
-        for (Tile[] tiles : gameTiles) {
-            isCompressed = compressTiles(tiles);
-            mergeTiles(tiles);
+        boolean isMerged = false;
+        boolean isNewNumberNeeded = false;
+        for (int i = 0; i < 4; i++) {
+            isCompressed = compressTiles(gameTiles[i]);
+            isMerged = mergeTiles(gameTiles[i]);
+            if(isCompressed || isMerged) {
+                isNewNumberNeeded = true;
+            }
         }
-        if (isCompressed) {
+        if (isNewNumberNeeded) {
+            System.out.println("NEW TILE ADDED");
             addTile();
         }
     }

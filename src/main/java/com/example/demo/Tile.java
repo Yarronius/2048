@@ -47,4 +47,19 @@ public class Tile {
     public void setValue(int value) {
         this.value = value;
     }
+
+    public static int getListIndexFromCoordinates(int x, int y) {
+        int index = x + y * 4;
+        return index * 2;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(this == obj) return true;
+        if(obj != null && getClass().equals(obj.getClass())) {
+            Tile o = (Tile) obj;
+            return this.getValue() == o.getValue();
+        }
+        return false;
+    }
 }
