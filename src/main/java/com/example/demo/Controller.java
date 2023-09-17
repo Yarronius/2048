@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class Controller {
     private Model model;
     private View view;
-    private int WINNING_TILE = 2048;
+    private int WINNING_TILE = 64;
     private EventHandler<KeyEvent> eventHandler;
 
     public Controller(Model model, View view) {
@@ -48,24 +48,68 @@ public class Controller {
                 switch (keyEvent.getCode()) {
                     case UP:
                         model.up();
-                        view.draw(model.getGameTiles());
+                        if(isGameWon()) {
+                            view.draw(model.getGameTiles());
+                            view.gameWon(getGameTiles());
+                            resetGame();
+                            //view.initialize();
+                            //view.draw(model.getGameTiles());
+                        }else {
+                            view.draw(model.getGameTiles());
+                        }
                         break;
                     case DOWN:
                         model.down();
-                        view.draw(model.getGameTiles());
+                        if(isGameWon()) {
+                            view.draw(model.getGameTiles());
+                            view.gameWon(getGameTiles());
+                            resetGame();
+                            //view.initialize();
+                            //view.draw(model.getGameTiles());
+                        }else {
+                            view.draw(model.getGameTiles());
+                        }
                         break;
                     case LEFT:
                         model.left();
-                        view.draw(model.getGameTiles());
+                        if(isGameWon()) {
+                            view.draw(model.getGameTiles());
+                            view.gameWon(getGameTiles());
+                            resetGame();
+                            //view.initialize();
+                            //view.draw(model.getGameTiles());
+                        } else {
+                            view.draw(model.getGameTiles());
+                        }
                         break;
                     case RIGHT:
                         model.right();
-                        view.draw(model.getGameTiles());
+                        if(isGameWon()) {
+                            view.draw(model.getGameTiles());
+                            view.gameWon(getGameTiles());
+                            resetGame();
+                            //view.initialize();
+                            //view.draw(model.getGameTiles());
+                        }else {
+                            view.draw(model.getGameTiles());
+                        }
                         break;
                     default:
                         break;
                 }
             }
         };
+    }
+
+    private boolean isGameWon() {
+        Tile tiles[][] = getGameTiles();
+        for (Tile[] tile : tiles) {
+            for (Tile t : tile) {
+                if(t.getValue() == WINNING_TILE) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }

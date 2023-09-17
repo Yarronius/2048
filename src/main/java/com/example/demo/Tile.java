@@ -2,6 +2,8 @@ package com.example.demo;
 
 import javafx.scene.paint.Color;
 
+import java.util.Objects;
+
 public class Tile {
     private int value = 0;
 
@@ -13,14 +15,6 @@ public class Tile {
 
     }
 
-    public boolean isEmpty() {
-        //new java.awt.Color(0xbbada0);
-        return value == 0;
-    }
-
-    public Color getFontColor() {
-        return value < 16 ? new Color(0.5, 0.5, 0.5, 1) : new Color(1,1,1,1);
-    }
 
     public Color getTileColor() {
         switch (value) {
@@ -48,10 +42,6 @@ public class Tile {
         this.value = value;
     }
 
-    public static int getListIndexFromCoordinates(int x, int y) {
-        int index = x + y * 4;
-        return index * 2;
-    }
 
     @Override
     public boolean equals(Object obj) {
@@ -61,5 +51,10 @@ public class Tile {
             return this.getValue() == o.getValue();
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(value);
     }
 }

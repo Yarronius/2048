@@ -1,26 +1,28 @@
 package com.example.demo;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.TilePane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 import java.util.List;
 
 public class View extends Pane {
     private static Color BGCOLOR = new Color(0.6, 0.6, 0.6, 1);
     private static String FONT = "Arial";
-    private static int TILE_SIZE = 96;
-    private static int TILE_MARGIN = 12;
 
-    private Controller controller;
     boolean isGameWon = false;
     boolean isGameLost = false;
 
@@ -51,8 +53,6 @@ public class View extends Pane {
             this.getChildren().add(pane);
             coordinateX = i % 4 == 0 ? (coordinateX + 120) : coordinateX;
             coordinateY = i % 4 == 0 ? 0 : (coordinateY + 120);
-            //textCoordinateX = i % 4 == 0 ? (textCoordinateX + 120) : textCoordinateX;
-            //textCoordinateY = i % 4 == 0 ? 90 : (textCoordinateY + 120);
         }
     }
 
@@ -72,20 +72,38 @@ public class View extends Pane {
             if(tile.getValue() < 9) {
                 text.setLayoutX(35);
                 text.setLayoutY(90);
-                text.setFont(new Font(98));
+                text.setFont(new Font(FONT,98));
             } else if(tile.getValue() > 8 && tile.getValue() < 65) {
                 text.setLayoutX(5);
                 text.setLayoutY(90);
-                text.setFont(new Font(98));
+                text.setFont(new Font(FONT,98));
             } else if (tile.getValue() > 64 && tile.getValue() < 1024) {
                 text.setLayoutX(0);
                 text.setLayoutY(80);
-                text.setFont(new Font(72));
+                text.setFont(new Font(FONT, 72));
             } else {
                 text.setLayoutX(0);
                 text.setLayoutY(75);
-                text.setFont(new Font(54));
+                text.setFont(new Font(FONT, 54));
             }
         }
+    }
+    public void gameWon(Tile[][] tiles) {
+        Stage window = new Stage();
+        window.setTitle("Вы победили!");
+        VBox pane = new VBox(15);
+        pane.setAlignment(Pos.CENTER);
+        Button buttonNewGame = new Button("Начать новую игру");
+        Button buttonClose = new Button("Закрыть программу");
+        buttonNewGame.setOnAction(event -> {
+            draw(tiles);
+            window.close();
+        });
+        pane.getChildren().add(buttonNewGame);
+        pane.getChildren().add(buttonClose);
+        Scene scene = new Scene(pane, 300, 100);
+        buttonClose.setOnAction(event -> System.exit(0));
+        window.setScene(scene);
+        window.show();
     }
 }

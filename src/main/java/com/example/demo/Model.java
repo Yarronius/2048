@@ -82,8 +82,12 @@ public class Model {
         boolean isMerged = false;
         boolean isNewNumberNeeded = false;
         for (int i = 0; i < 4; i++) {
-            isMerged = mergeTiles(gameTiles[i]);
             isCompressed = compressTiles(gameTiles[i]);
+            isMerged = mergeTiles(gameTiles[i]);
+            if(isMerged) {
+                compressTiles(gameTiles[i]);
+            }
+
             if(isCompressed || isMerged) {
                 isNewNumberNeeded = true;
             }
