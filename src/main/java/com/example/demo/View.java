@@ -1,20 +1,17 @@
 package com.example.demo;
 
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.layout.BackgroundPosition;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.TilePane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.StrokeType;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.util.List;
@@ -23,8 +20,8 @@ public class View extends Pane {
     private static Color BGCOLOR = new Color(0.6, 0.6, 0.6, 1);
     private static String FONT = "Arial";
 
-    boolean isGameWon = false;
-    boolean isGameLost = false;
+    //boolean isGameWon = false;
+    //boolean isGameLost = false;
 
     public View() {
 
@@ -91,6 +88,7 @@ public class View extends Pane {
     public void gameEnded(Tile[][] tiles, String result, String score, String maxTile) {
         Stage window = new Stage();
         window.setTitle(result);
+        window.initModality(Modality.APPLICATION_MODAL);
         VBox pane = new VBox(15);
         Text scr = new Text("Количество набранных очков " + score);
         Text max = new Text("Максимальное число " + maxTile);

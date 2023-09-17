@@ -3,12 +3,14 @@ package com.example.demo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Stack;
 
 public class Model {
     private static final int FIELD_WIDTH = 4;
-    private static Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];;
-    int score = 0;
-    int maxTile = 0;
+    private static Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+    private Stack<Tile[][]> gameLogger = new Stack<>();
+    private int score = 0;
+    private int maxTile = 0;
 
     public Model() {
         resetGameTiles();
@@ -39,6 +41,7 @@ public class Model {
         }
         addTile();
         addTile();
+        logStep();
     }
 
     private boolean compressTiles(Tile[] tiles) {
@@ -53,7 +56,6 @@ public class Model {
                 result[k++] = tiles[i];
             }
         }
-        System.out.println("Shift not done - " + Arrays.equals(tiles, result));
         if (Arrays.equals(tiles, result)) return false;
         for (int i = 0; i < 4; i++) {
             tiles[i] = result[i];
@@ -78,8 +80,8 @@ public class Model {
     }
 
     void left() {
-        boolean isCompressed = false;
-        boolean isMerged = false;
+        boolean isCompressed;
+        boolean isMerged;
         boolean isNewNumberNeeded = false;
         for (int i = 0; i < 4; i++) {
             isCompressed = compressTiles(gameTiles[i]);
@@ -140,13 +142,39 @@ public class Model {
             for (int x = 0; x < 4; x++) {
                 if (gameTiles[y][x].getValue() == 0) {
                     return true;
-                } else if (y < 4 - 1 && gameTiles[y][x] == gameTiles[y + 1][x]) {
+                } else if (y < 3 && gameTiles[y][x].getValue() == gameTiles[y + 1][x].getValue()) {
                     return true;
-                } else if ((x < 4 - 1) && gameTiles[y][x] == gameTiles[y][x + 1]) {
+                } else if (x < 3 && gameTiles[y][x].getValue() == gameTiles[y][x + 1].getValue()) {
                     return true;
                 }
             }
         }
         return false;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public int getMaxTile() {
+        return maxTile;
+    }
+
+    public void logStep() {
+        Tile[][] logArray = new Tile[4][4];
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                logArray[i][j] = new Tile(gameTiles[i][j].getValue());
+            }
+        }
+        gameLogger.add(logArray);
+    }
+
+    public Stack<Tile[][]> getGameLogger() {
+        return gameLogger;
+    }
+
+    public void setGameTiles(Tile[][] gameTiles) {
+        Model.gameTiles = gameTiles;
     }
 }

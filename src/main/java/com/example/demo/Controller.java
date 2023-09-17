@@ -1,20 +1,14 @@
 package com.example.demo;
 
-import com.example.demo.Model;
-import com.example.demo.Tile;
-import com.example.demo.View;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Text;
 
-import java.util.Arrays;
+import java.util.EmptyStackException;
 
 public class Controller {
     private Model model;
     private View view;
-    private int WINNING_TILE = 64;
+    private int WINNING_TILE = 2048;
     private EventHandler<KeyEvent> eventHandler;
 
     public Controller(Model model, View view) {
@@ -25,13 +19,8 @@ public class Controller {
         return model.getGameTiles();
     }
 
-    public int getScore() {
-        return model.score;
-    }
 
     public void resetGame() {
-        view.isGameLost = false;
-        view.isGameWon = false;
         model.resetGameTiles();
     }
 
@@ -48,20 +37,31 @@ public class Controller {
                 switch (keyEvent.getCode()) {
                     case UP:
                         model.up();
+                        model.logStep();
                         gameCheckout();
                         break;
                     case DOWN:
                         model.down();
+                        model.logStep();
                         gameCheckout();
                         break;
                     case LEFT:
                         model.left();
+                        model.logStep();
                         gameCheckout();
                         break;
                     case RIGHT:
                         model.right();
+                        model.logStep();
                         gameCheckout();
                         break;
+                    case ESCAPE:
+                        System.exit(0);
+                    case Z :
+                        if(keyEvent.isControlDown()) {
+                            oneStepBack();
+                            view.draw(model.getGameTiles());
+                        }
                     default:
                         break;
                 }
@@ -93,8 +93,17 @@ public class Controller {
         String result = "";
         if(isGameWon() || isGameLost()) {
             result = isGameWon() ? "Вы выграли!" : "Вы проиграли!";
-            view.gameEnded(getGameTiles(), result, String.valueOf(model.score), String.valueOf(model.maxTile));
+            view.gameEnded(getGameTiles(), result, String.valueOf(model.getScore()), String.valueOf(model.getMaxTile()));
             resetGame();
+        }
+    }
+
+    private void oneStepBack() {
+        try {
+            Tile[][] oneStepBackState = model.getGameLogger().pop();
+            model.setGameTiles(oneStepBackState);
+        } catch (EmptyStackException e) {
+
         }
     }
 }
