@@ -88,10 +88,12 @@ public class View extends Pane {
             }
         }
     }
-    public void gameWon(Tile[][] tiles) {
+    public void gameEnded(Tile[][] tiles, String result, String score, String maxTile) {
         Stage window = new Stage();
-        window.setTitle("Вы победили!");
+        window.setTitle(result);
         VBox pane = new VBox(15);
+        Text scr = new Text("Количество набранных очков " + score);
+        Text max = new Text("Максимальное число " + maxTile);
         pane.setAlignment(Pos.CENTER);
         Button buttonNewGame = new Button("Начать новую игру");
         Button buttonClose = new Button("Закрыть программу");
@@ -99,9 +101,11 @@ public class View extends Pane {
             draw(tiles);
             window.close();
         });
+        pane.getChildren().add(scr);
+        pane.getChildren().add(max);
         pane.getChildren().add(buttonNewGame);
         pane.getChildren().add(buttonClose);
-        Scene scene = new Scene(pane, 300, 100);
+        Scene scene = new Scene(pane, 300, 170);
         buttonClose.setOnAction(event -> System.exit(0));
         window.setScene(scene);
         window.show();

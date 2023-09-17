@@ -136,7 +136,17 @@ public class Model {
     }
 
     public boolean canMove() {
-        if (!getEmptyTiles().isEmpty()) return true;
+        for (int y = 0; y < 4; y++) {
+            for (int x = 0; x < 4; x++) {
+                if (gameTiles[y][x].getValue() == 0) {
+                    return true;
+                } else if (y < 4 - 1 && gameTiles[y][x] == gameTiles[y + 1][x]) {
+                    return true;
+                } else if ((x < 4 - 1) && gameTiles[y][x] == gameTiles[y][x + 1]) {
+                    return true;
+                }
+            }
+        }
         return false;
     }
 }

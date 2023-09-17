@@ -48,51 +48,19 @@ public class Controller {
                 switch (keyEvent.getCode()) {
                     case UP:
                         model.up();
-                        if(isGameWon()) {
-                            view.draw(model.getGameTiles());
-                            view.gameWon(getGameTiles());
-                            resetGame();
-                            //view.initialize();
-                            //view.draw(model.getGameTiles());
-                        }else {
-                            view.draw(model.getGameTiles());
-                        }
+                        gameCheckout();
                         break;
                     case DOWN:
                         model.down();
-                        if(isGameWon()) {
-                            view.draw(model.getGameTiles());
-                            view.gameWon(getGameTiles());
-                            resetGame();
-                            //view.initialize();
-                            //view.draw(model.getGameTiles());
-                        }else {
-                            view.draw(model.getGameTiles());
-                        }
+                        gameCheckout();
                         break;
                     case LEFT:
                         model.left();
-                        if(isGameWon()) {
-                            view.draw(model.getGameTiles());
-                            view.gameWon(getGameTiles());
-                            resetGame();
-                            //view.initialize();
-                            //view.draw(model.getGameTiles());
-                        } else {
-                            view.draw(model.getGameTiles());
-                        }
+                        gameCheckout();
                         break;
                     case RIGHT:
                         model.right();
-                        if(isGameWon()) {
-                            view.draw(model.getGameTiles());
-                            view.gameWon(getGameTiles());
-                            resetGame();
-                            //view.initialize();
-                            //view.draw(model.getGameTiles());
-                        }else {
-                            view.draw(model.getGameTiles());
-                        }
+                        gameCheckout();
                         break;
                     default:
                         break;
@@ -111,5 +79,22 @@ public class Controller {
             }
         }
         return false;
+    }
+
+    private boolean isGameLost() {
+        if(!model.canMove() && !isGameWon()) {
+            return true;
+        }
+        return false;
+    }
+
+    private void gameCheckout() {
+        view.draw(model.getGameTiles());
+        String result = "";
+        if(isGameWon() || isGameLost()) {
+            result = isGameWon() ? "Вы выграли!" : "Вы проиграли!";
+            view.gameEnded(getGameTiles(), result, String.valueOf(model.score), String.valueOf(model.maxTile));
+            resetGame();
+        }
     }
 }
