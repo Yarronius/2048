@@ -17,7 +17,7 @@ public class Game2048 extends Application {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, controller.getEventHandler());
         stage.setTitle("2048");
         stage.setScene(scene);
-        stage.setResizable(true);
+        stage.setResizable(false);
         stage.show();
     }
 
