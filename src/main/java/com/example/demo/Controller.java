@@ -2,7 +2,6 @@ package com.example.demo;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
-
 import java.util.EmptyStackException;
 
 public class Controller {
@@ -15,6 +14,7 @@ public class Controller {
         this.model = model;
         this.view = view;
     }
+
     public Tile[][] getGameTiles() {
         return model.getGameTiles();
     }

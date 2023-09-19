@@ -15,7 +15,6 @@ public class Tile {
 
     }
 
-
     public Color getTileColor() {
         switch (value) {
             case 0 : return new Color(0.65,0.6,0.55,1);
@@ -41,7 +40,6 @@ public class Tile {
     public void setValue(int value) {
         this.value = value;
     }
-
 
     @Override
     public boolean equals(Object obj) {

@@ -6,9 +6,6 @@ import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class Game2048 extends Application {
-    private static final int SIDE = 4;
-
-
     @Override
     public void start(Stage stage) throws Exception {
         Model model = new Model();
@@ -20,10 +17,9 @@ public class Game2048 extends Application {
         stage.addEventHandler(KeyEvent.KEY_PRESSED, controller.getEventHandler());
         stage.setTitle("2048");
         stage.setScene(scene);
-        stage.setResizable(false);
+        stage.setResizable(true);
         stage.show();
     }
-
 
     @Override
     public void init() {
@@ -35,11 +31,9 @@ public class Game2048 extends Application {
 
     }
 
-
     private int getRandomNumber(int num) {
         return (int)(Math.random()*num);
     }
-
 
     public static void main(String[] args) {
         launch();

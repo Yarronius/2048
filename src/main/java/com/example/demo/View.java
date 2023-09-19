@@ -13,15 +13,11 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import java.util.List;
 
 public class View extends Pane {
     private static Color BGCOLOR = new Color(0.6, 0.6, 0.6, 1);
     private static String FONT = "Arial";
-
-    //boolean isGameWon = false;
-    //boolean isGameLost = false;
 
     public View() {
 
@@ -40,7 +36,6 @@ public class View extends Pane {
             Rectangle rectangle = new Rectangle(120, 120);
             Text text = new Text("");
             text.setFont(new Font(98));
-            rectangle.setFill(Color.BEIGE);
             rectangle.setStroke(Color.BLACK);
             rectangle.setStrokeType(StrokeType.INSIDE);
             pane.getChildren().add(rectangle);
