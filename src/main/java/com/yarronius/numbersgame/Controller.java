@@ -1,8 +1,9 @@
-package com.example.demo;
+package com.yarronius.numbersgame;
 
+import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
-import java.util.EmptyStackException;
+
 
 public class Controller {
     private Model model;
@@ -33,30 +34,30 @@ public class Controller {
         eventHandler = new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent keyEvent) {
-
                 switch (keyEvent.getCode()) {
                     case UP:
-                        model.up();
                         model.logStep();
+                        model.up();
                         gameCheckout();
                         break;
                     case DOWN:
-                        model.down();
                         model.logStep();
+                        model.down();
                         gameCheckout();
                         break;
                     case LEFT:
-                        model.left();
                         model.logStep();
+                        model.left();
                         gameCheckout();
                         break;
                     case RIGHT:
-                        model.right();
                         model.logStep();
+                        model.right();
                         gameCheckout();
                         break;
                     case ESCAPE:
-                        System.exit(0);
+                        Platform.exit();
+                        break;
                     case Z :
                         if(keyEvent.isControlDown()) {
                             oneStepBack();
@@ -71,6 +72,7 @@ public class Controller {
 
     private boolean isGameWon() {
         Tile tiles[][] = getGameTiles();
+
         for (Tile[] tile : tiles) {
             for (Tile t : tile) {
                 if(t.getValue() == WINNING_TILE) {
@@ -78,6 +80,7 @@ public class Controller {
                 }
             }
         }
+
         return false;
     }
 
@@ -85,25 +88,22 @@ public class Controller {
         if(!model.canMove() && !isGameWon()) {
             return true;
         }
+
         return false;
     }
 
     private void gameCheckout() {
         view.draw(model.getGameTiles());
         String result = "";
+
         if(isGameWon() || isGameLost()) {
-            result = isGameWon() ? "Вы выграли!" : "Вы проиграли!";
+            result = isGameWon() ? "Вы выиграли!" : "Вы проиграли!";
             view.gameEnded(getGameTiles(), result, String.valueOf(model.getScore()), String.valueOf(model.getMaxTile()));
             resetGame();
         }
     }
 
     private void oneStepBack() {
-        try {
-            Tile[][] oneStepBackState = model.getGameLogger().pop();
-            model.setGameTiles(oneStepBackState);
-        } catch (EmptyStackException e) {
-
-        }
+        model.oneStepBack();
     }
 }

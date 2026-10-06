@@ -1,14 +1,13 @@
-package com.example.demo;
+package com.yarronius.numbersgame;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Model {
     private static final int FIELD_WIDTH = 4;
-    private static Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
-    private Stack<Tile[][]> gameLogger = new Stack<>();
+    private Tile[][] gameTiles = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+    private Deque<Tile[][]> tilesLogger = new ArrayDeque<>();
+    private Deque<Integer> scoreLogger = new ArrayDeque<>();
+    private Deque<Integer> maxTileLogger = new ArrayDeque<>();
     private int score = 0;
     private int maxTile = 0;
 
@@ -29,16 +28,25 @@ public class Model {
     private void addTile() {
         List<Tile> emptyTiles = getEmptyTiles();
         if (!emptyTiles.isEmpty()) {
-            emptyTiles.get((int) (emptyTiles.size() * Math.random())).setValue((Math.random() < 0.9 ? 2 : 4));
+            int newValue = Math.random() < 0.9 ? 2 : 4;
+            emptyTiles.get((int) (emptyTiles.size() * Math.random())).setValue(newValue);
+            maxTile = Math.max(maxTile, newValue);
         }
     }
 
     void resetGameTiles() {
+        score = 0;
+        maxTile = 0;
+        tilesLogger.clear();
+        scoreLogger.clear();
+        maxTileLogger.clear();
+
         for (int i = 0; i < FIELD_WIDTH; i++) {
             for (int j = 0; j < FIELD_WIDTH; j++) {
                 gameTiles[i][j] = new Tile(0);
             }
         }
+
         addTile();
         addTile();
         logStep();
@@ -46,9 +54,11 @@ public class Model {
 
     private boolean compressTiles(Tile[] tiles) {
         Tile[] result = new Tile[FIELD_WIDTH];
+
         for (int i = 0 ; i < 4; i++) {
             result[i] = new Tile();
         }
+
         for (int i = 0, j = 0, k = 0; i < FIELD_WIDTH; i++) {
             if (tiles[i].getValue() == 0) {
                 result[FIELD_WIDTH - 1 - j++] = tiles[i];
@@ -56,7 +66,9 @@ public class Model {
                 result[k++] = tiles[i];
             }
         }
+
         if (Arrays.equals(tiles, result)) return false;
+
         for (int i = 0; i < 4; i++) {
             tiles[i] = result[i];
         }
@@ -65,6 +77,7 @@ public class Model {
 
     private boolean mergeTiles(Tile[] tiles) {
         boolean isChanged = false;
+
         for (int i = 0; i < tiles.length - 1; i++) {
             if (tiles[i].getValue() != 0 && tiles[i].getValue() == tiles[i + 1].getValue()) {
                 isChanged = true;
@@ -73,9 +86,10 @@ public class Model {
                 tiles[i + 1].setValue(0);
                 compressTiles(tiles);
                 score += scoreIncrement;
-                if (scoreIncrement > maxTile) maxTile = scoreIncrement;
+                maxTile = Math.max(maxTile, tiles[i].getValue());
             }
         }
+
         return isChanged;
     }
 
@@ -83,6 +97,7 @@ public class Model {
         boolean isCompressed;
         boolean isMerged;
         boolean isNewNumberNeeded = false;
+
         for (int i = 0; i < 4; i++) {
             isCompressed = compressTiles(gameTiles[i]);
             isMerged = mergeTiles(gameTiles[i]);
@@ -94,6 +109,7 @@ public class Model {
                 isNewNumberNeeded = true;
             }
         }
+
         if (isNewNumberNeeded) {
             addTile();
         }
@@ -130,6 +146,7 @@ public class Model {
                 temp[j][FIELD_WIDTH - i - 1] = gameTiles[i][j];
             }
         }
+
         gameTiles = temp;
     }
 
@@ -149,6 +166,7 @@ public class Model {
                 }
             }
         }
+
         return false;
     }
 
@@ -161,20 +179,34 @@ public class Model {
     }
 
     public void logStep() {
-        Tile[][] logArray = new Tile[4][4];
+        Tile[][] snapshot = new Tile[4][4];
+
         for (int i = 0; i < FIELD_WIDTH; i++) {
             for (int j = 0; j < FIELD_WIDTH; j++) {
-                logArray[i][j] = new Tile(gameTiles[i][j].getValue());
+                snapshot[i][j] = new Tile(gameTiles[i][j].getValue());
             }
         }
-        gameLogger.add(logArray);
+
+        tilesLogger.add(snapshot);
+        scoreLogger.addLast(score);
+        maxTileLogger.addLast(maxTile);
     }
 
-    public Stack<Tile[][]> getGameLogger() {
-        return gameLogger;
+    public void oneStepBack() {
+        if (tilesLogger.isEmpty()) {
+            return;
+        }
+
+        gameTiles = tilesLogger.removeLast();
+        score = scoreLogger.removeLast();
+        maxTile = maxTileLogger.removeLast();
+    }
+
+    public Deque<Tile[][]> getTilesLogger() {
+        return tilesLogger;
     }
 
     public void setGameTiles(Tile[][] gameTiles) {
-        Model.gameTiles = gameTiles;
+        this.gameTiles = gameTiles;
     }
 }
