@@ -1,6 +1,7 @@
-package com.example.demo;
+package com.yarronius.numbersgame;
 
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
@@ -18,21 +19,8 @@ public class Game2048 extends Application {
         stage.setTitle("2048");
         stage.setScene(scene);
         stage.setResizable(false);
+        stage.setOnCloseRequest(event -> Platform.exit());
         stage.show();
-    }
-
-    @Override
-    public void init() {
-
-    }
-
-    @Override
-    public void stop() throws Exception {
-
-    }
-
-    private int getRandomNumber(int num) {
-        return (int)(Math.random()*num);
     }
 
     public static void main(String[] args) {

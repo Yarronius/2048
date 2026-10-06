@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.yarronius.numbersgame;
 
 import javafx.scene.paint.Color;
 
@@ -48,6 +48,7 @@ public class Tile {
             Tile o = (Tile) obj;
             return this.getValue() == o.getValue();
         }
+
         return false;
     }
 

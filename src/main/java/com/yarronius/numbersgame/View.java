@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.yarronius.numbersgame;
 
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -16,7 +16,6 @@ import javafx.stage.Stage;
 import java.util.List;
 
 public class View extends Pane {
-    private static Color BGCOLOR = new Color(0.6, 0.6, 0.6, 1);
     private static String FONT = "Arial";
 
     public View() {
@@ -28,6 +27,7 @@ public class View extends Pane {
         int coordinateY = 0;
         int textCoordinateX = 35;
         int textCoordinateY = 90;
+
         for (int i = 1; i <= 16; i++) {
             Pane pane = new Pane();
             pane.setPrefSize(120, 120);
@@ -50,17 +50,20 @@ public class View extends Pane {
 
     public void draw(Tile[][] tiles) {
         List<Node> tileList = this.getChildren();
+
         for (int i = 0; i < 16; i++) {
             Tile tile = tiles[i%4][i/4];
             Pane pane = (Pane) tileList.get(i);
             Rectangle rectangle = (Rectangle) pane.getChildren().get(0);
             rectangle.setFill(tile.getTileColor());
             Text text = (Text) pane.getChildren().get(1);
+
             if (tile.getValue() != 0) {
                 text.setText(String.valueOf(tile.getValue()));
             } else {
                 text.setText("");
             }
+
             if(tile.getValue() < 9) {
                 text.setLayoutX(35);
                 text.setLayoutY(90);
@@ -84,20 +87,24 @@ public class View extends Pane {
         Stage window = new Stage();
         window.setTitle(result);
         window.initModality(Modality.APPLICATION_MODAL);
+
         VBox pane = new VBox(15);
         Text scr = new Text("Количество набранных очков " + score);
         Text max = new Text("Максимальное число " + maxTile);
         pane.setAlignment(Pos.CENTER);
+
         Button buttonNewGame = new Button("Начать новую игру");
         Button buttonClose = new Button("Закрыть программу");
         buttonNewGame.setOnAction(event -> {
             draw(tiles);
             window.close();
         });
+
         pane.getChildren().add(scr);
         pane.getChildren().add(max);
         pane.getChildren().add(buttonNewGame);
         pane.getChildren().add(buttonClose);
+
         Scene scene = new Scene(pane, 300, 170);
         buttonClose.setOnAction(event -> System.exit(0));
         window.setScene(scene);
